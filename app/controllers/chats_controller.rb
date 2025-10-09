@@ -1,10 +1,10 @@
 class ChatsController < ApplicationController
-  before_action :block_related_users, only: [:show]
+  before_action :block_non_related_users, only: [:show]
 
   def show
     @user = User.find(params[:id])
     rooms = current_user.user_rooms.pluck(:room_id)
-    user_rooms = UserRoom.find_by(user_id: @user.id, room_id:, rooms)
+    user_rooms = UserRoom.find_by(user_id: @user.id, room_id: rooms)
       unless user_rooms.nil?
         @room = user_rooms.room
       else
@@ -34,7 +34,7 @@ class ChatsController < ApplicationController
   end
 
   def block_non_related_users
-    user = User.find(params{:id})
+    user = User.find(params[:id])
     unless current_user.following?(user) && user.following?(current_user)
       redirect_to posts_path
     end
