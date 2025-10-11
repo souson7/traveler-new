@@ -31,6 +31,14 @@ class User < ApplicationRecord
   def following?(user)
     following_user.include?(user)
   end
+
+  def get_profile_image(width, height)
+    if profile_image_id.present?
+      profile_image
+    else
+      "no_image_svg"
+    end
+  end
   
   validates :name, presence: true
   
